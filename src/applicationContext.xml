@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+  http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+  http://www.springframework.org/schema/context
+  http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+
+<bean id="userServTarget" class="com.tarena.biz.impl.UserServImpl"/> 
+<!-- 定义通知 -->
+		<!-- 前置通知 -->
+		<bean id="beforeLogAdvice" class="com.tarena.advice.BeforeLogAdvice"/>
+		<!-- 后置通知 -->
+		<bean id="afterLogAdvice" class="com.tarena.advice.AfterLogAdvice"/>
+
+
+
+<!-- 代理类作用: 生成代理类，织入通知 -->  
+  <bean id="userServProxy" 
+   class="org.springframework.aop.framework.ProxyFactoryBean">
+   <property name="interfaces">
+   <!-- 可以添加多个接口 -->
+    <list>
+     <value>com.tarena.biz.IUserServ</value>
+    </list>
+   </property>
+   <!-- 引入通知 -->
+   <property name="interceptorNames">
+    <list>
+     <value>beforeLogAdvice</value>
+     <!-- <value>afterLogAdvice</value> -->
+    </list>
+   </property>
+   <!-- 目标对象 -->
+   <property name="target" ref="userServTarget"/>
+  </bean>
+
+</beans>
